@@ -1,5 +1,6 @@
 
 # Loading packages and Sourcing scripts ----
+library( tools )
 library( shiny )
 library( shinydashboard )
 library( shinyFiles )
@@ -24,6 +25,9 @@ library( glmGamPoi )
 library( scCATCH )
 
 sapply(  dir("scripts",full.names = T), source )
+
+# Increase the file upload size to 500MB
+options(shiny.maxRequestSize=500*1024^2)
 
 # UI SIDE ----
 ui <- dashboardPage( 
@@ -115,6 +119,10 @@ ui <- dashboardPage(
 
       ## load data ----
       tabItem(tabName = "load",
+        h2("Upload data"),
+        fileInput("upload_files", "Files to upload", multiple = TRUE),
+        uiOutput( "upload_progress" ),
+
         h2("Load Datasets"),
         fluidRow( column( width=6,
           fluidRow( 
@@ -801,7 +809,10 @@ server <- function(input, output, session) {
   })
   
   # Set user paths
-  volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), getVolumes()())
+  # On a server instance only allow the user to access the home
+  # volumes <- c(Home = fs::path_home(), "R Installation" = R.home(), getVolumes()())
+  working_dir <- "/home/shiny/"
+  volumes <- c(Home = fs::path_home())
   
   ## Intro ----
   
@@ -887,9 +898,25 @@ server <- function(input, output, session) {
       }
     } else { gen_noDataNotif( inputDataset$Seurat, loading=T )}
   }, ignoreInit = TRUE)
-  
-  
-  
+
+  observe({
+    if (is.null(input$upload_files)) return()
+    output$upload_progress <- renderUI({ HTML( "Saving files..." ) })
+
+    file.copy(input$upload_files$datapath, paste(working_dir, input$upload_files$name, sep = ""))
+
+    zips <- list.files(working_dir, pattern = ".*zip", full.names = TRUE)
+    if(length(zips)>0){
+      output$upload_progress <- renderUI({ HTML( "Extracting..." ) })
+
+      lapply(zips, function(zip){
+        unzip(zip, exdir = paste(working_dir, file_path_sans_ext(basename(zip)) , sep = ""))
+        file.remove(zip)
+      })
+    }
+
+    output$upload_progress <- renderUI({ HTML( "Done!" ) })
+  })
   
   ## QC analysis ----
   
