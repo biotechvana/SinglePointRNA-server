@@ -57,4 +57,24 @@ After installing R, RStudio, and the R libraries stated above:
 
 It's also possible to run SinglePoint RNA in a remote server using [Shiny Server](https://posit.co/products/open-source/shinyserver/)
 
+### Docker Image
+
+You can also run the SinglePointRNA with Docker:
+
+ 1. First of all install [Docker](https://docs.docker.com/get-docker/).
+ 2. Clone or download this repository.
+ 3. Build the SinglePointRNA with: (This takes about an hour to build)
+
+ ```console
+ $ docker build . -t singlepointrna
+ ```
+
+ 4. Run SinglePointRNA with:
+
+ ```console
+ $ docker run -d -p 3838:3838 singlepointrna
+ ```
+
+ 5. Open your webrowser and go to http://localhost:3838/SinglePointRNA/
+
 
