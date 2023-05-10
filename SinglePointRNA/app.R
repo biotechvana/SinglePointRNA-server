@@ -41,13 +41,6 @@ ui <- dashboardPage(
       ),
       title = tags$img(src='nameLogo.png', width=280 ),
       titleWidth = 300,
-      tags$li( class = "dropdown", 
-        br(),
-        p( align="left", "Contact with us through GitHub:",
-        a( href="https://github.com/ScienceParkMadrid/SinglePointRNA",  
-          img(src='GHicon.png', width="50px" ) ),
-        HTML("&#160;&#160;&#160;")
-      ) ),
       tags$li( class = "dropdown")
     ),
   
@@ -67,9 +60,10 @@ ui <- dashboardPage(
       menuItem("Differential Expression", tabName = "DiffExp", icon = icon("crosshairs")),
       menuItem("Dataset plots", tabName = "featPl", icon = icon("chart-bar")),
       menuItem("Cell Type Imputation", tabName = "cellType", icon = icon("bullseye")),
-      menuItem("Altered Pathways", tabName = "paths", icon=icon("bezier-curve") )
+      menuItem("Altered Pathways", tabName = "paths", icon=icon("bezier-curve") ),
+      menuItem("Funding", tabName = "funding", icon=icon("coins") )
     ),
-    br(),img(src="logos.png", width=280), br()
+    br(),img(src="logos-b-p.png", width=280), br()
     
   ),
   
@@ -779,6 +773,24 @@ ui <- dashboardPage(
         )
         )
               
+      ),
+      
+      ## funding ----
+      tabItem(tabName = "funding",
+        h2("Funding"),
+        
+        fluidRow( 
+          column(9, 
+           fluidRow(
+             column(9, 
+                HTML(
+                  paste0("<h4>This Project is funded by the following entities:</h4>")
+                ),
+                img(src="logos2.png", width=400)
+             )
+           )
+          )
+        )
       )
       
     ) ) ) 
