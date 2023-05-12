@@ -77,4 +77,6 @@ You can also run the SinglePointRNA with Docker:
 
  5. Open your webrowser and go to http://localhost:3838/SinglePointRNA/
 
+## Citation
 
+[SinglePointRNA, an user-friendly application implementing single cell RNA-seq analysis software](https://arxiv.org/abs/2305.00008)
